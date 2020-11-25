@@ -1,20 +1,7 @@
-from oauth2client.service_account import ServiceAccountCredentials
-from httplib2 import Http
 from parse import parse
-import gspread
 
+from util import get_gs
 
-def get_gs(json_file, doc_id):
-    scopes = ['https://www.googleapis.com/auth/spreadsheets']
-
-    credentials = ServiceAccountCredentials\
-            .from_json_keyfile_name(json_file, scopes=scopes)
-    http_auth = credentials.authorize(Http())
-
-    gs = gspread.authorize(credentials)
-    gfile = gs.open_by_key(doc_id)
-
-    return gfile
 
 def load_charactors(conf):
     gfile = get_gs(conf['json_file'], conf['doc_id'])

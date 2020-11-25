@@ -5,7 +5,6 @@ import discord
 from parse import parse
 
 from message_manager import MessageManager 
-from coc.charactors import load_charactors
 
 
 def main():
@@ -37,9 +36,8 @@ def main():
 
             elif input_msg.startswith('/yasumi'):
                 mode, = parse('/yasumi {}', input_msg).fixed
-                charactors = load_charactors(conf)
                 try:
-                    mm = MessageManager(mode, charactors)
+                    mm = MessageManager(mode, conf)
                     await message.channel.send('[INFO]ゲームシステムを**'+mode+'**に設定したわ')
                 except ValueError as e:
                     await message.channel.send('[INFO]正しいゲームシステムを入力して頂戴')
@@ -55,6 +53,7 @@ def main():
                     await message.channel.send(msg)
 
     client.run(client_id)
+
 
 if __name__ == '__main__':
     main()

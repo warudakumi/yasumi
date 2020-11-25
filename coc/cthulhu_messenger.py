@@ -3,7 +3,8 @@ import re
 from parse import parse, search
 import numpy as np
 
-from util import dice, judge, pick
+from util import pick
+from coc.diceroll import dice, judge
 from coc.temp_insan_7th import temp_insan
 from coc.ind_insan_7th import ind_insan
 
@@ -14,6 +15,7 @@ class CthulhuMessenger():
         self.temp_insan = temp_insan 
         self.ind_insan = ind_insan
         self.charactors = charactors
+
 
     def call(self, input_msg, player):
         charactor = self.charactors[player]
@@ -34,6 +36,7 @@ class CthulhuMessenger():
             return self.__skill_roll(input_msg, charactor)
         else:
             return None
+
 
     def __set_status(self, input_msg, charactor):
 
@@ -75,6 +78,7 @@ class CthulhuMessenger():
 
         return msg
 
+
     def __get_temp_insan(self):
         msg = '[一時的狂気]\n'
         msg += self.temp_insan[dice(1, 20)[0]]
@@ -82,11 +86,13 @@ class CthulhuMessenger():
                 + 'ラウンドまたは' + str(dice(1, 6)*10+30) + '分'
         return msg
 
+
     def __get_ind_insan(self):
         msg = '[不定の狂気]\n'
         msg += self.ind_insan[dice(1, 10)[0]]
         msg += '\n-> ' + str(dice(1, 10)*10) + '時間'
         return msg
+
 
     def __charactor_introduce(self, charactor):
         status = {}
@@ -110,6 +116,7 @@ class CthulhuMessenger():
         for k, v in zip(status.keys(), status.values()):
             msg += '{k}: {v} \n'.format(k=k, v=v)
         return msg
+
 
     def __skill_roll(self, input_msg, charactor):
 
@@ -162,6 +169,7 @@ class CthulhuMessenger():
 
         return msg
 
+
     def __simple_dice(self, input_msg):
 
         def single_dice(msg):
@@ -169,6 +177,7 @@ class CthulhuMessenger():
             dice_num = int(dice_info[0])
             dice_size = int(dice_info[1])
             return dice(dice_num, dice_size) 
+
 
         def get_parameters(msg):
             result = {}
@@ -223,6 +232,7 @@ class CthulhuMessenger():
                             )
 
         return msg
+
 
     def __charactor_create(self):
         status = {}

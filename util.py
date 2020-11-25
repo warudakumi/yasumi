@@ -1,45 +1,21 @@
-import numpy as np
 from parse import search
+from oauth2client.service_account import ServiceAccountCredentials
+from httplib2 import Http
+import gspread
 
 
-def dice(dice_num, dice_size):
-    result = np.random.randint(1, int(dice_size+1), int(dice_num))
-    return result
+def get_gs(json_file, doc_id):
+    scopes = ['https://www.googleapis.com/auth/spreadsheets']
 
-def judge(dice_value, skill_value, bonus=0, penalty=0):
+    credentials = ServiceAccountCredentials\
+            .from_json_keyfile_name(json_file, scopes=scopes)
+    http_auth = credentials.authorize(Http())
 
-    def get_achivement(dice_value, skill_value):
-        if dice_value == 1:
-            return 'Critical'
-        elif dice_value <= int(skill_value / 5):
-            return 'Extreme'
-        elif dice_value <= int(skill_value / 2):
-            return 'Hard'
-        elif dice_value <= skill_value:
-            return 'Regular'
-        elif dice_value >= 96:
-            return 'Failure(Fumble)'
-        else:
-            return 'Failure'
+    gs = gspread.authorize(credentials)
+    gfile = gs.open_by_key(doc_id)
 
-    if bonus == penalty:
-        pass
+    return gfile
 
-    else:
-        one_place = int(str(dice_value)[-1])
-        ten_place = int(str(dice_value)[:-1]) if len(str(dice_value)) > 1 else 0   
-
-        if bonus > penalty:
-            addition = (dice(int(bonus-penalty), 10) - 1).min() 
-            dice_value = 10 * min(ten_place, addition) + one_place 
-
-        else:
-            addition = (dice(int(penalty-bonus), 10) - 1).max() 
-            dice_value = 10 * max(ten_place, addition) + one_place 
-
-    achivement = get_achivement(dice_value, skill_value)
-
-    return (achivement, dice_value) 
 
 def pick(token, input_msg):
     result = search(token, input_msg)

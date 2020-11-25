@@ -1,13 +1,15 @@
 from coc.cthulhu_messenger import CthulhuMessenger
+from coc.charactors import load_charactors as coc_lc
 
 
 class MessageManager():
 
-    def __init__(self, mode, charactors):
+    def __init__(self, mode, conf):
         if mode == 'coc':
-            self.messenger = CthulhuMessenger(charactors)
+            self.messenger = CthulhuMessenger(coc_lc(conf))
         else:
             raise ValueError("invalid mode value.")
+
 
     def call(self, input_msg, player):
         return self.messenger.call(input_msg, player)
