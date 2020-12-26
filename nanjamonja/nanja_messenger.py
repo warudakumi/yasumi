@@ -72,7 +72,7 @@ class NanjaMessenger():
         self.gamemode = 'ongoing'
 
         items = self.players.items()
-        random.shuffle(items)
+        random.shuffle(list(items))
         self.players = OrderedDict(items)
 
         msg = '登録を締め切ったわ，順番はこんな感じね\n'
@@ -84,7 +84,7 @@ class NanjaMessenger():
 
 
     def __turn_up(self):
-        if self.onfield:
+        if self.onfield is not None:
             msg = 'すでにカードが盤上にあるわ' 
         elif not self.deck:
             msg = '山札が無くなっているわ\n'\
@@ -98,7 +98,7 @@ class NanjaMessenger():
 
 
     def __name(self, input_msg):
-        if not self.onfield:
+        if self.onfield is None:
             msg = 'カードが盤上にないわ'
         else:
             input_msg = input_msg.replace('|', '')
@@ -118,7 +118,7 @@ class NanjaMessenger():
 
 
     def __trash(self):
-        if not self.onfield:
+        if self.onfield is None:
             msg = 'カードが盤上にないわ'
         else:
             self.pool.append(self.onfield)
@@ -131,7 +131,7 @@ class NanjaMessenger():
 
 
     def __pick(self, player):
-        if not self.onfield:
+        if self.onfield is None:
             msg = 'カードが盤上にないわ'
         else:
             if self.monsters[self.onfield]['name'] is not None:
