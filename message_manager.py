@@ -1,5 +1,6 @@
 from coc.cthulhu_messenger import CthulhuMessenger
 from coc.charactors import load_charactors as coc_lc
+from nanjamonja.nanja_messenger import NanjaMessenger
 
 
 class MessageManager():
@@ -7,6 +8,8 @@ class MessageManager():
     def __init__(self, mode, conf):
         if mode == 'coc':
             self.messenger = CthulhuMessenger(coc_lc(conf))
+        elif mode == 'nanjamonja':
+            self.messenger = NanjaMessenger()
         else:
             raise ValueError("invalid mode value.")
 
