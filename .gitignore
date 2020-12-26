@@ -1,4 +1,5 @@
 __pycache__
 privatesession.json
 config.json
-nanjamonja/images/*.*
+*.png
+*.jpg
