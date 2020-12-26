@@ -33,7 +33,9 @@ class NanjaMessenger():
 
 
     def call(self, input_msg, player):
-        if self.gamemode == 'matchmake':
+        if input_msg.startswith('/help'):
+            return self.__show_help()
+        elif self.gamemode == 'matchmake':
             if input_msg.startswith('/join'):
                 return self.__register_player(player)
             elif input_msg.startswith('/close'):
@@ -53,10 +55,10 @@ class NanjaMessenger():
                 return self.__show_status()
             elif input_msg.startswith('/record'):
                 return self.__show_record()
-            elif input_msg.startswith('/help'):
-                return self.__show_help()
             elif input_msg.startswith('/list'):
                 return [self.__show_monster(monster) for monster in self.monsters.values()]
+            return None
+        else:
             return None
 
 
