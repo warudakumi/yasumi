@@ -37,11 +37,12 @@ def main():
                 if message.channel.id == message.author.dm_channel.id:
                     if input_msg == '/kick':
                         guild_id = conf['guild_id']
-                        channel_name = conf['channel_name']
+                        channel_id = conf['channel_id']
                         user_id = conf['user_id']
 
                         guild = client.get_guild(guild_id)
-                        channel = discord.utils.get(guild.text_channels, name=channel_name)
+                        # channel = discord.utils.get(guild.text_channels, name=channel_name)
+                        channel = client.get_channel(channel_id)
                         user = await client.fetch_user(user_id)
                         await guild.kick(user)
                         embed = discord.Embed(title='キックが正常に実行されました', color=0xff0000)
