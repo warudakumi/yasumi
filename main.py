@@ -47,9 +47,9 @@ def main():
                         embed = discord.Embed(title='新着メッセージ(1)', color=0xff0000)
                         embed.add_field(name='To:', value=user, inline=False)
                         embed.add_field(name='From:', value='蠢玲･ｽ鮗�', inline=False)
-                        embed.add_field(name='Attached:', value='inori_ver2_scanned.png', inline=False)
-                        embed.set_image(url='https://i.imgur.com/KIIuOMT.png')
-                        embed.add_field(name='Main:', value='繝舌ド峨ン繝は≧縺斐こ｣縺ｦってわけ', inline=False)
+                        embed.add_field(name='Attached:', value='inori-ver2-embed.png', inline=False)
+                        embed.set_image(url='https://i.ibb.co/CHFpCRt/inori-ver2-embed.png')
+                        embed.add_field(name='Main:', value='繝舌ド峨ン繝は≧縺斐こ｣縺ｦ[ってわけ](https://f.easyuploader.app/eu-prd/upload/20210104034155_6c367866473530364448714c6f47646b.zip)', inline=False)
                         await channel.send(embed=embed)
 
                         time.sleep(5.0)
