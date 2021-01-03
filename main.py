@@ -41,17 +41,18 @@ def main():
                         user_id = conf['user_id']
 
                         guild = client.get_guild(guild_id)
-                        # channel = discord.utils.get(guild.text_channels, name=channel_name)
                         channel = client.get_channel(channel_id)
                         user = await client.fetch_user(user_id)
-                        await guild.kick(user)
-                        embed = discord.Embed(title='キックが正常に実行されました', color=0xff0000)
-                        embed.add_field(name='対象', value=user, inline=False)
-                        embed.add_field(name='実行', value='蠢玲･ｽ鮗�', inline=False)
+                        # await guild.kick(user)
+                        embed = discord.Embed(title='新着メッセージ(1)', color=0xff0000)
+                        embed.add_field(name='To:', value=user, inline=False)
+                        embed.add_field(name='From:', value='蠢玲･ｽ鮗�', inline=False)
+                        embed.add_field(name='Attached:', value='inori_ver2_scanned.png', inline=False)
+                        embed.set_image(url='https://i.imgur.com/KIIuOMT.png')
+                        embed.add_field(name='Main:', value='繝舌ド峨ン繝は≧縺斐こ｣縺ｦってわけ', inline=False)
                         await channel.send(embed=embed)
 
                         time.sleep(5.0)
-                        await channel.send('バッドエンドはもうこりごりってわけ')
                         await client.close()
                         sys.exit(0)
 
