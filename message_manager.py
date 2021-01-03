@@ -11,7 +11,18 @@ class MessageManager():
         elif mode == 'nanjamonja':
             self.messenger = NanjaMessenger()
         else:
-            raise ValueError("invalid mode value.")
+            raise ValueError('invalid mode value.')
+
+
+    def switch_cheat(self):
+        try:
+            self.messenger.switch_cheat()
+            if self.messenger.on_cheat:
+                return True
+            else:
+                return False
+        except AttributeError:
+            raise AttributeError('cannot execute cheat mode.')
 
 
     def call(self, input_msg, player):

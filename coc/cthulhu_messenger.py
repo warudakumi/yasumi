@@ -15,6 +15,7 @@ class CthulhuMessenger():
         self.temp_insan = temp_insan 
         self.ind_insan = ind_insan
         self.charactors = charactors
+        self.on_cheat = False
 
 
     def call(self, input_msg, player):
@@ -36,6 +37,13 @@ class CthulhuMessenger():
             return self.__skill_roll(input_msg, charactor)
         else:
             return None
+
+
+    def switch_cheat(self):
+        if not self.on_cheat:
+            self.on_cheat = True
+        else:
+            self.on_cheat = False
 
 
     def __set_status(self, input_msg, charactor):
@@ -153,7 +161,7 @@ class CthulhuMessenger():
 
         dice_num = int(charactor[skill_name]['dice_num'])
         dice_size = int(charactor[skill_name]['dice_size'])
-        dice_value = dice(dice_num, dice_size).min()
+        dice_value = dice(dice_num, dice_size).min() if not self.on_cheat else np.sum(dice(1, 3))
         result = judge(dice_value, int(skill_value), roll_info['bonus'], roll_info['penalty'])
         msg = '[技能ロール]\n'\
                 '<{skill_name}>{operator}{correction} = [{skill_value}] '\
@@ -209,7 +217,7 @@ class CthulhuMessenger():
         opt_plus = np.array([int(v) for v in roll_info['plus_opt']]) if roll_info['plus_opt'] else np.array(0)
         opt_minus = np.array([int(v) for v in roll_info['minus_opt']]) if roll_info['minus_opt'] else np.array(0) 
 
-        dice_sum = np.sum(dice_plus) - np.sum(dice_minus) + np.sum(opt_plus) - np.sum(opt_minus)
+        dice_sum = np.sum(dice_plus) - np.sum(dice_minus) + np.sum(opt_plus) - np.sum(opt_minus) if not self.on_cheat else np.sum(dice(1, 3)) 
         is_secret = roll_info['secret']
 
         if roll_info['target']:
