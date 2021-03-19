@@ -217,7 +217,10 @@ class CthulhuMessenger():
         opt_plus = np.array([int(v) for v in roll_info['plus_opt']]) if roll_info['plus_opt'] else np.array(0)
         opt_minus = np.array([int(v) for v in roll_info['minus_opt']]) if roll_info['minus_opt'] else np.array(0) 
 
-        dice_sum = np.sum(dice_plus) - np.sum(dice_minus) + np.sum(opt_plus) - np.sum(opt_minus) if not self.on_cheat else np.sum(dice(1, 3)) 
+        dice_sum = np.sum(dice_plus)\
+                - np.sum(dice_minus)\
+                + np.sum(opt_plus)\
+                - np.sum(opt_minus) if not self.on_cheat else np.sum(dice(1, 3)) 
         is_secret = roll_info['secret']
 
         if roll_info['target']:
