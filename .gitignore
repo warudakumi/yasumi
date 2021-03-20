@@ -3,3 +3,5 @@ privatesession.json
 config.json
 *.png
 *.jpg
+*.mp3
+*.wav

@@ -13,11 +13,13 @@ def main():
         conf = json.load(f)
 
     mode = ''
-    mm = ''
-    command = ''
+    mm = None
+    voice = None
+
+    client_id = conf['client_id']
+    sound_file = conf['sound_file']
 
     client = discord.Client()
-    client_id = conf['client_id']
 
     @client.event
     async def on_ready():
@@ -27,7 +29,8 @@ def main():
     async def on_message(message):
         nonlocal mode
         nonlocal mm 
-        nonlocal command
+        nonlocal voice
+        nonlocal sound_file
 
         if client.user != message.author:
             input_msg = message.content
@@ -37,13 +40,23 @@ def main():
                 await client.close()
                 sys.exit(0)
 
+            elif input_msg == '/sound':
+                if not voice:
+                    await message.channel.send('[INFO]ゲームシステムが設定されていないようね')
+                else:
+                    voice.play(discord.FFmpegPCMAudio(sound_file))
+
             elif input_msg.startswith('/yasumi'):
                 mode, = parse('/yasumi {}', input_msg).fixed
                 try:
                     mm = MessageManager(mode, conf)
+                    channel = message.author.voice.channel
+                    voice = await channel.connect()
                     await message.channel.send('[INFO]ゲームシステムを**'+mode+'**に設定したわ')
-                except ValueError as e:
+                except ValueError as ve:
                     await message.channel.send('[INFO]正しいゲームシステムを入力して頂戴')
+                except AttributeError as ae:
+                    await message.channel.send('[INFO]適当なボイスチャンネルにログインして貰えるかしら')
 
             elif input_msg.startswith('/'):
                 if not mode:
@@ -62,8 +75,9 @@ def main():
                         for sub_msg in msg:
                             await message.channel.send(sub_msg[0], file=sub_msg[1])
                             time.sleep(1.0)
+
+                    # in case of show image
                     else:
-                        # in case of show image
                         if isinstance(msg, tuple):
                             await message.channel.send(msg[0], file=msg[1])
                         else:
