@@ -32,10 +32,8 @@ class NanjaMessenger():
         self.pool = []
 
 
-    def call(self, input_msg, player):
-        if input_msg.startswith('/help'):
-            return self.__show_help()
-        elif self.gamemode == 'matchmake':
+    def __call__(self, input_msg, player):
+        if self.gamemode == 'matchmake':
             if input_msg.startswith('/join'):
                 return self.__register_player(player)
             elif input_msg.startswith('/close'):
@@ -58,8 +56,10 @@ class NanjaMessenger():
             elif input_msg.startswith('/list'):
                 return [self.__show_monster(monster) for monster in self.monsters.values()]
             return None
-        else:
-            return None
+
+
+    def __str__(self):
+        return 'nanjamonja'
 
 
     def __register_player(self, player):
@@ -171,17 +171,19 @@ class NanjaMessenger():
         return (name, discord.File(img_path))
 
 
-    def __show_help(self):
-        msg = 'コマンド一覧よ\n'\
-                '`/join`: マッチメイク時にプレイヤーを登録\n'\
+    @classmethod
+    def show_help(cls):
+        msg = '**yasumi: Nanjamonja-commands**\n'\
+                '__マッチメイク__\n'\
+                '`/join`: 参加するプレイヤーを登録\n'\
                 '`/close`: プレイヤー登録を締切りゲームを開始\n'\
+                '__メイン__\n'\
                 '`/turn`: 山札からカードを表示\n'\
-                '`/name hoge`: 表示されているカードを_hoge_と命名\n'\
+                '`/name [hoge]`: 表示されているカードを_hoge_と命名\n'\
                 '`/trash`: 表示されているカードを捨札に移動\n'\
                 '`/pick`: 表示されているカードを発言プレイヤーの手札に移動\n'\
                 '`/status`: 現在の山札と捨札，未発見のカードの枚数を表示\n'\
                 '`/record`: 全プレイヤーの名前とポイント(手札枚数)を表示\n'\
-                '`/list`: 全カードと名前を表示\n'\
-                '`/help`: ヘルプを表示'
+                '`/list`: 全カードと名前を表示'
         return msg
 

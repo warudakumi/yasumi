@@ -15,10 +15,9 @@ class CthulhuMessenger():
         self.temp_insan = temp_insan 
         self.ind_insan = ind_insan
         self.charactors = charactors
-        self.on_cheat = False
 
 
-    def call(self, input_msg, player):
+    def __call__(self, input_msg, player):
         charactor = self.charactors[player]
 
         if input_msg.startswith('/dice'):
@@ -39,11 +38,8 @@ class CthulhuMessenger():
             return None
 
 
-    def switch_cheat(self):
-        if not self.on_cheat:
-            self.on_cheat = True
-        else:
-            self.on_cheat = False
+    def __str__(self):
+        return 'coc'
 
 
     def __set_status(self, input_msg, charactor):
@@ -149,7 +145,12 @@ class CthulhuMessenger():
 
         roll_info = get_parameters(input_msg)
         skill_name = roll_info['skill_name']
-        skill_value = charactor[skill_name]['value'] 
+        try:
+            skill_value = charactor[skill_name]['value'] 
+        except KeyError:
+            msg = '[INFO-CoC]登録されていない技能ね: __'+skill_name+'__'
+            return msg
+
         operator = ''
         correction = ''
 
@@ -161,7 +162,7 @@ class CthulhuMessenger():
 
         dice_num = int(charactor[skill_name]['dice_num'])
         dice_size = int(charactor[skill_name]['dice_size'])
-        dice_value = dice(dice_num, dice_size).min() if not self.on_cheat else np.sum(dice(1, 3))
+        dice_value = dice(dice_num, dice_size).min()
         result = judge(dice_value, int(skill_value), roll_info['bonus'], roll_info['penalty'])
         msg = '[技能ロール]\n'\
                 '<{skill_name}>{operator}{correction} = [{skill_value}] '\
@@ -220,7 +221,7 @@ class CthulhuMessenger():
         dice_sum = np.sum(dice_plus)\
                 - np.sum(dice_minus)\
                 + np.sum(opt_plus)\
-                - np.sum(opt_minus) if not self.on_cheat else np.sum(dice(1, 3)) 
+                - np.sum(opt_minus) 
         is_secret = roll_info['secret']
 
         if roll_info['target']:
@@ -288,5 +289,26 @@ class CthulhuMessenger():
         msg = '[探索者作成]\n'
         for k, v in zip(status.keys(), status.values()):
             msg += '{k}: {v} \n'.format(k=k, v=v)
+        return msg
+
+
+    @classmethod
+    def show_help(cls):
+        msg = '**yasumi: CoC-commands**\n'\
+                '__ダイスロール__\n'\
+                '`/dice [m]d[n]`: ダイスを振る\n'\
+                '`/dice [m]d[n][+|-][m]d[n][...]`: 通常ダイスを振る(追加ダイスあり)\n'\
+                '`/dice [m]d[n]([hoge])`: 通常ダイスを振り，技能値_hoge_で判定する\n'\
+                '`/dice [m]d[n] secret`: ダイス結果をシークレットにする\n'\
+                '__技能ロール__\n'\
+                '`/[fuga]`: 技能値_fuga_でダイスを振る\n'\
+                '`/[fuga] [+|-|*|/][n]`: 技能値_fuga_でダイスを振る(数値補正あり)\n'\
+                '`/[fuga] b[m] p[n]`: 技能値_fuga_でダイスを振る(ボーナス/ペナルティダイスあり)\n'\
+                '__ユーティリティ__\n'\
+                '`/set [piyo] [+|-|*|/][n]`: ステータスを補正する\n'\
+                '`/temp`: 一時的狂気を表示\n'\
+                '`/indef`: 不定の狂気を表示\n'\
+                '`/cm`: 探索者をランダムに作成\n'\
+                '`/ci`: 探索者のステータスを表示\n'
         return msg
 
