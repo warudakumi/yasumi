@@ -14,7 +14,7 @@ class FreeChatMessenger():
         if input_msg.startswith('/trg'):
             return self.__rolling_girls()
         elif input_msg.startswith('/たばこ'):
-            return self.__hate_tobaco()
+            return self.__hate_tobacco()
         else:
             return None
 
