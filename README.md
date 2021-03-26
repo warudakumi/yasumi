@@ -1,5 +1,5 @@
 # yasumi
-Discord Bot for CoC7th, NanjaMonja, SmallTalk.
+Discord Bot for CoC7th, NanjaMonja, SmallTalk.  
 <img src="https://i.imgur.com/w1JEDuD.jpg" width=25%>
 
 ## Overview
