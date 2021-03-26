@@ -100,13 +100,15 @@ def main():
             elif input_msg.startswith('#'):
                 if not voice:
                     await message.channel.send('[INFO]イニシャライズして頂戴')
+                elif voice.is_playing():
+                    voice.source = discord.FFmpegPCMAudio(sound_map[input_msg])
                 else:
                     try:
                         voice.play(discord.FFmpegPCMAudio(sound_map[input_msg]))
                     except KeyError:
                         await message.channel.send('[INFO]登録されていないサウンドよ: __'+input_msg+'__')
-                    except ClientException:
-                        await message.channel.send('[INFO]いま別のを再生しているわ')
+                    except TypeError :
+                        await message.channel.send('[INFO]ファイルが正しい形式じゃないわね')
 
     client.run(client_id)
 
