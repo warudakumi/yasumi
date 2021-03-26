@@ -22,6 +22,7 @@ def main():
     @client.event
     async def on_ready():
         print('[yasumi]Logged in as {0.user}'.format(client))
+
     @client.event
     async def on_message(message):
         nonlocal mm 
@@ -95,7 +96,6 @@ def main():
 
                     else:
                         await message.channel.send('[INFO]無効なコマンドよ: __'+input_msg+'__')
-
 
             elif input_msg.startswith('#'):
                 if not voice:
