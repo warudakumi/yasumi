@@ -21,19 +21,19 @@ class CthulhuMessenger():
         charactor = self.charactors[player]
 
         if input_msg.startswith('/dice'):
-            return self.__simple_dice(input_msg)
+            return (self.__simple_dice(input_msg), True)
         elif input_msg.startswith('/ci'):
             return self.__charactor_introduce(charactor)
         elif input_msg.startswith('/cm'):
-            return self.__charactor_create()
+            return (self.__charactor_create(), True)
         elif input_msg.startswith('/indef'):
-            return self.__get_ind_insan() 
+            return (self.__get_ind_insan(), True) 
         elif input_msg.startswith('/temp'):
-            return self.__get_temp_insan()
+            return (self.__get_temp_insan(), True)
         elif input_msg.startswith('/set'):
             return self.__set_status(input_msg, charactor)
         elif input_msg.startswith('/'):
-            return self.__skill_roll(input_msg, charactor)
+            return (self.__skill_roll(input_msg, charactor), True)
         else:
             return None
 

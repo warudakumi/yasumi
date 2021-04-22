@@ -92,7 +92,14 @@ def main():
                             time.sleep(1.0)
 
                     elif isinstance(msg, tuple):
-                        await message.channel.send(msg[0], file=msg[1])
+                        if isinstance(msg[1], discord.File):
+                            await message.channel.send(msg[0], file=msg[1])
+                        else:
+                            if voice.is_playing():
+                                voice.source = discord.FFmpegPCMAudio(mm.voice_path)
+                            else:
+                                voice.play(discord.FFmpegPCMAudio(mm.voice_path))
+                            await message.channel.send(msg[0])
 
                     else:
                         await message.channel.send('[INFO]無効なコマンドよ: __'+input_msg+'__')

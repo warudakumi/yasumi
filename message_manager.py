@@ -16,13 +16,23 @@ class MessageManager():
         else:
             raise ValueError('invalid mode value.')
 
+        sound_file_map = {
+                'coc': 'sound/diceroll.mp3',
+                'nanjamonja': None,
+                'free': None
+                }
+        
         self.mode = str(self.messenger)
+        self.voice_path = sound_file_map[self.mode]
 
 
     def __call__(self, input_msg, player):
         msg = self.messenger(input_msg, player)
         if self.mode == 'coc':
             indicate = 'PL:' + player + '\n'
+            if isinstance(msg, tuple):
+                msg = indicate + msg[0]
+                return (msg, msg[1])
             msg = indicate + msg
             
         return msg
