@@ -84,7 +84,10 @@ def main():
                     msg = mm(input_msg, player)
 
                     if isinstance(msg, str):
-                        await message.channel.send(msg)
+                        if not msg:
+                            pass
+                        else:
+                            await message.channel.send(msg)
 
                     elif isinstance(msg, list):
                         for sub_msg in msg:

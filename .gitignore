@@ -3,3 +3,6 @@ privatesession.json
 config.json
 *.png
 *.jpg
+cac/*.json
+cac/*_items.py
+cac/*_accidents.py

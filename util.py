@@ -1,3 +1,6 @@
+import random
+from collections import OrderedDict
+
 from parse import search
 from oauth2client.service_account import ServiceAccountCredentials
 from httplib2 import Http
@@ -25,3 +28,8 @@ def pick(token, input_msg):
     else:
         return None
 
+
+def shuffle(deck):
+    items = list(deck.keys())
+    random.shuffle(items)
+    return items

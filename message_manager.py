@@ -2,6 +2,7 @@ from coc.cthulhu_messenger import CthulhuMessenger
 from coc.charactors import load_charactors as coc_lc
 from nanjamonja.nanja_messenger import NanjaMessenger
 from freechat.free_messenger import FreeChatMessenger
+from cac.cachoco_messenger import CachocoMessenger
 
 
 class MessageManager():
@@ -13,12 +14,15 @@ class MessageManager():
             self.messenger = NanjaMessenger()
         elif input_mode == 'free':
             self.messenger = FreeChatMessenger()
+        elif input_mode == 'cachoco':
+            self.messenger = CachocoMessenger()
         else:
             raise ValueError('invalid mode value.')
 
         sound_file_map = {
                 'coc': 'sound/diceroll.mp3',
                 'nanjamonja': None,
+                'cachoco': None,
                 'free': None
                 }
         
@@ -45,6 +49,8 @@ class MessageManager():
             msg = NanjaMessenger.show_help()
         elif help_at == 'free':
             msg = FreeChatMessenger.show_help()
+        elif help_at == 'cachoco':
+            msg = CachocoMessenger.show_help()
         elif help_at == 'main':
             msg = '**yasumi: Main-commands**\n'\
                     '`/yasumi init [hoge]`: システムを_hoge_でイニシャライズ(省略時: free)\n'\
