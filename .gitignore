@@ -6,3 +6,5 @@ config.json
 cac/*.json
 cac/*_items.py
 cac/*_accidents.py
+sound/*
+!diceroll.mp3
