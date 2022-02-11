@@ -9,7 +9,7 @@ class MessageManager():
 
     def __init__(self, input_mode, conf):
         if input_mode == 'coc':
-            self.messenger = CthulhuMessenger(coc_lc(conf))
+            self.messenger = CthulhuMessenger(conf)
         elif input_mode == 'nanjamonja':
             self.messenger = NanjaMessenger()
         elif input_mode == 'free':

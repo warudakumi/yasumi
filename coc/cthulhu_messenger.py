@@ -3,18 +3,21 @@ import re
 from parse import parse, search
 import numpy as np
 
-from util import pick
+from util import pick, get_gs
 from coc.diceroll import dice, judge
+from coc.charactors import load_charactors, set_value_to_gs
 from coc.temp_insan_7th import temp_insan
 from coc.ind_insan_7th import ind_insan
 
 
 class CthulhuMessenger():
 
-    def __init__(self, charactors):
+    def __init__(self, conf):
         self.temp_insan = temp_insan 
         self.ind_insan = ind_insan
-        self.charactors = charactors
+
+        self.gs = get_gs(conf['json_file'], conf['doc_id'])
+        self.charactors = load_charactors(self.gs)
 
 
     def __call__(self, input_msg, player):
@@ -25,13 +28,13 @@ class CthulhuMessenger():
         elif input_msg.startswith('/ci'):
             return self.__charactor_introduce(charactor)
         elif input_msg.startswith('/cm'):
-            return (self.__charactor_create(), True)
+            return (self.__charactor_create(player), True)
         elif input_msg.startswith('/indef'):
             return (self.__get_ind_insan(), True) 
         elif input_msg.startswith('/temp'):
             return (self.__get_temp_insan(), True)
         elif input_msg.startswith('/set'):
-            return self.__set_status(input_msg, charactor)
+            return self.__set_status(input_msg, player, charactor)
         elif input_msg.startswith('/'):
             return (self.__skill_roll(input_msg, charactor), True)
         else:
@@ -42,7 +45,7 @@ class CthulhuMessenger():
         return 'coc'
 
 
-    def __set_status(self, input_msg, charactor):
+    def __set_status(self, input_msg, player, charactor):
 
         def get_parameters(msg):
             skill_name, parsed_correction = parse('{} {}', msg).fixed
@@ -69,6 +72,9 @@ class CthulhuMessenger():
         query = str(current_status) + operator + str(correction) 
         new_status = eval(query)
         charactor[skill_name]['value'] = new_status
+
+        set_value_to_gs(self.gs, player, {skill_name: new_status}, init=False)
+
         msg = '[ステータス変動]\n'\
                 '<{skill_name}>: [{current_status}]{operator}{correction} '\
                 '-> [{new_status}]'\
@@ -246,7 +252,7 @@ class CthulhuMessenger():
         return msg
 
 
-    def __charactor_create(self):
+    def __charactor_create(self, player_name):
         status = {}
         status['STR'] = 5 * np.sum(dice(3, 6))
         status['CON'] = 5 * np.sum(dice(3, 6))
@@ -289,6 +295,9 @@ class CthulhuMessenger():
         msg = '[探索者作成]\n'
         for k, v in zip(status.keys(), status.values()):
             msg += '{k}: {v} \n'.format(k=k, v=v)
+
+        set_value_to_gs(self.gs, player_name, status, init=True)
+
         return msg
 
 

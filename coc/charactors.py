@@ -3,10 +3,8 @@ from parse import parse
 from util import get_gs
 
 
-def load_charactors(conf):
-    gfile = get_gs(conf['json_file'], conf['doc_id'])
-    worksheets = gfile.worksheets()
-
+def load_charactors(gs):
+    worksheets = gs.worksheets()
     charactors = {} 
     for ws in worksheets:
         charactor = {}
@@ -32,4 +30,27 @@ def load_charactors(conf):
         charactors[player_name] = charactor
 
     return charactors
+
+
+def set_value_to_gs(gs, player_name, skill_val_map, init=True):
+    worksheet = gs.worksheet(player_name)
+
+    key_range = 'A2:A16' if init else 'A2:A90'
+    target_range = 'D2:D16' if init else 'B2:B90'
+
+    cells_key = worksheet.range(key_range)
+    cells_key = [cell.value for cell in cells_key]
+    cells_target = worksheet.range(target_range)
+    cells_update = []
+
+    for skill_name, skill_val in skill_val_map.items():
+        try:
+            key_idx = cells_key.index(skill_name)
+            cells_update.append(cells_target[key_idx])
+            cells_update[-1].value = str(skill_val)
+        except Exception as e:
+            print(e)
+            continue
+
+    worksheet.update_cells(cells_update)
 
