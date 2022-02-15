@@ -8,9 +8,9 @@ def load_charactors(gs):
     charactors = {} 
     for ws in worksheets:
         charactor = {}
-        cell_keys = ws.range('F3:F91')
-        cell_values = ws.range('G3:G91')
-        cell_dice = ws.range('L3:L91')
+        cell_keys = ws.range('A25:A113')
+        cell_values = ws.range('B25:B113')
+        cell_dice = ws.range('G25:G113')
 
         for k, v, d in zip(cell_keys, cell_values, cell_dice):
 
@@ -25,7 +25,7 @@ def load_charactors(gs):
                 }
 
         charactor['NAME'] = {
-                'value': ws.acell('D2').value, 
+                'value': ws.acell('B2').value, 
                 'dice_num': None, 
                 'dice_size': None
                 }
@@ -39,8 +39,8 @@ def load_charactors(gs):
 def set_value_to_gs(gs, player_name, skill_val_map, init=True):
     worksheet = gs.worksheet(player_name)
 
-    key_range = 'F3:F17' if init else 'F3:F91'
-    target_range = 'I3:I17' if init else 'G3:G91'
+    key_range = 'A25:A39' if init else 'A25:A113'
+    target_range = 'D25:D39' if init else 'B25:B113'
 
     cells_key = worksheet.range(key_range)
     cells_key = [cell.value for cell in cells_key]
