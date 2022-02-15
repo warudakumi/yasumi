@@ -8,23 +8,27 @@ def load_charactors(gs):
     charactors = {} 
     for ws in worksheets:
         charactor = {}
-        cell_keys = ws.col_values(1)
-        cell_values = ws.col_values(2)
-        cell_dice = ws.col_values(7)
+        cell_keys = ws.range('F3:F91')
+        cell_values = ws.range('G3:G91')
+        cell_dice = ws.range('L3:L91')
+
         for k, v, d in zip(cell_keys, cell_values, cell_dice):
-            if d == 'dice':
-                dice_num, dice_size = 0, 0
 
-            else:
-                dice_info = parse('{}d{}', d)
-                dice_num = dice_info[0]
-                dice_size = dice_info[1]
+            dice_info = parse('{}d{}', d.value)
+            dice_num = dice_info[0]
+            dice_size = dice_info[1]
 
-            charactor[k] = {
-                'value': v,
+            charactor[k.value] = {
+                'value': v.value,
                 'dice_num': dice_num,
                 'dice_size': dice_size
-            }
+                }
+
+        charactor['NAME'] = {
+                'value': ws.acell('D2').value, 
+                'dice_num': None, 
+                'dice_size': None
+                }
 
         player_name = ws.title
         charactors[player_name] = charactor
@@ -35,8 +39,8 @@ def load_charactors(gs):
 def set_value_to_gs(gs, player_name, skill_val_map, init=True):
     worksheet = gs.worksheet(player_name)
 
-    key_range = 'A2:A16' if init else 'A2:A90'
-    target_range = 'D2:D16' if init else 'B2:B90'
+    key_range = 'F3:F17' if init else 'F3:F91'
+    target_range = 'I3:I17' if init else 'G3:G91'
 
     cells_key = worksheet.range(key_range)
     cells_key = [cell.value for cell in cells_key]
