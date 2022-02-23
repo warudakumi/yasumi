@@ -73,7 +73,6 @@ class CthulhuMessenger():
         new_status = eval(query)
         charactor[skill_name]['value'] = new_status
 
-        set_value_to_gs(self.gs, player, {skill_name: new_status}, init=False)
 
         msg = '[ステータス変動]\n'\
                 '<{skill_name}>: [{current_status}]{operator}{correction} '\
@@ -85,6 +84,13 @@ class CthulhuMessenger():
                         correction = correction,
                         new_status = new_status
                         )
+
+        try:
+            set_value_to_gs(self.gs, player, {skill_name: new_status}, init=False)
+        except Exception as e:
+            msg += '\n[INFO-CoC]スプレッドシートに書き込みできなかったみたいよ'
+            print(e)
+
 
         return msg
 
@@ -296,7 +302,11 @@ class CthulhuMessenger():
         for k, v in zip(status.keys(), status.values()):
             msg += '{k}: {v} \n'.format(k=k, v=v)
 
-        set_value_to_gs(self.gs, player_name, status, init=True)
+        try:
+            set_value_to_gs(self.gs, player_name, status, init=True)
+        except Exception as e:
+            msg += '[INFO-CoC]スプレッドシートに書き込みできなかったみたいよ'
+            print(e)
 
         return msg
 
